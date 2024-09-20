@@ -17,10 +17,7 @@ public record EventoDTO(
         String dataEvento,
 
         @NotNull( message = "Il nr Posti Disponibili è obbligatorio")
-        int nrPostiDisponibili,
-
-        @NotEmpty(message = "L'organizzatore è obbligatorio")
-        String organizzatore
+        int nrPostiDisponibili
 
         ) {
 }

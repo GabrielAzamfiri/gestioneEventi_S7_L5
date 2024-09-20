@@ -14,6 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,14 +51,19 @@ public class EventiService {
             throw new BadRequestException("Errore: il formato data inserito non è corretto. inserire un formato data (yyyy-mm-dd)");
         }
 
-        try {
-            uuidUtente=  UUID.fromString(eventoDTO.organizzatore());
-        }catch (Exception e){
-            throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
-        }
-        Utente organizzatore = utentiRepository.findById(uuidUtente).orElseThrow(() ->  new NotFoundException(uuidUtente));
+//        try {
+//            uuidUtente=  UUID.fromString(eventoDTO.organizzatore());
+//        }catch (Exception e){
+//            throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
+//        }
+//        Utente organizzatore = utentiRepository.findById(uuidUtente).orElseThrow(() ->  new NotFoundException(uuidUtente));
 
-        Evento evento = new Evento(eventoDTO.titolo(),eventoDTO.descrizione(),dataEvento,eventoDTO.nrPostiDisponibili(),organizzatore);
+        //tramite l'authentication riesco ad accedere al utente organizzatore del evento e passarlo come organizzatore alla creazione del evento
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Utente organizzatore = (Utente) authentication.getPrincipal();
+
+        Evento evento = new Evento(eventoDTO.titolo(),eventoDTO.descrizione(),dataEvento,eventoDTO.nrPostiDisponibili(), organizzatore);
 
         return eventiRepository.save(evento);
 
@@ -79,20 +87,20 @@ public class EventiService {
             throw new BadRequestException("Errore: il formato data inserito non è corretto. inserire un formato data (yyyy-mm-dd)");
         }
 
-        UUID uuidUtente;
-        try {
-            uuidUtente=  UUID.fromString(updatedEventoDTO.organizzatore());
-        }catch (Exception e){
-            throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
-        }
-        Utente organizzatore = utentiRepository.findById(uuidUtente).orElseThrow(() ->  new NotFoundException(uuidUtente));
+//        UUID uuidUtente;
+//        try {
+//            uuidUtente=  UUID.fromString(updatedEventoDTO.organizzatore());
+//        }catch (Exception e){
+//            throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
+//        }
+//        Utente organizzatore = utentiRepository.findById(uuidUtente).orElseThrow(() ->  new NotFoundException(uuidUtente));
 
 
         found.setTitolo(updatedEventoDTO.titolo());
         found.setDescrizione(updatedEventoDTO.descrizione());
         found.setDataEvento(dataEvento);
         found.setNrPostiDisponibili(updatedEventoDTO.nrPostiDisponibili());
-        found.setOrganizzatore(organizzatore);
+
 
         return this.eventiRepository.save(found);
     }
