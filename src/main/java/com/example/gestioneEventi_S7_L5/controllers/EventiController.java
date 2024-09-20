@@ -55,13 +55,13 @@ public class EventiController {
     }
 
     @PutMapping("/{eventoId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ORGANIZZATORE_EVENTI')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Evento findByIdAndUpdate(@PathVariable UUID eventoId, @RequestBody @Validated EventoDTO updatedEventoDTO) {
         return eventiService.findByIdAndUpdate(eventoId, updatedEventoDTO);
     }
 
     @DeleteMapping("/{eventoId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ORGANIZZATORE_EVENTI')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID eventoId) {
         eventiService.findByIdAndDelete(eventoId);

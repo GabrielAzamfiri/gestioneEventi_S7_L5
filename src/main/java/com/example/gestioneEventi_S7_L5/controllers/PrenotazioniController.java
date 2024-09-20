@@ -25,6 +25,7 @@ public class PrenotazioniController {
 
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")  // Solo gli admin possono modificare altri utenti
     public Page<Prenotazione> getAll(@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size,
                                      @RequestParam(defaultValue = "id") String sortBy) {
@@ -32,6 +33,7 @@ public class PrenotazioniController {
     }
 
     @GetMapping("/{prenotazioneId}")
+    @PreAuthorize("hasAuthority('ADMIN')")  // Solo gli admin possono modificare altri utenti
     public Prenotazione getById(@PathVariable UUID prenotazioneId) {
         return prenotazioniService.findById(prenotazioneId);
     }

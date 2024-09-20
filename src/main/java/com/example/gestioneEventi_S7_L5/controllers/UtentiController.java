@@ -1,11 +1,14 @@
 package com.example.gestioneEventi_S7_L5.controllers;
 
 
+import com.example.gestioneEventi_S7_L5.entities.Evento;
 import com.example.gestioneEventi_S7_L5.entities.Prenotazione;
 import com.example.gestioneEventi_S7_L5.entities.Utente;
 import com.example.gestioneEventi_S7_L5.exceptions.NotFoundException;
+import com.example.gestioneEventi_S7_L5.payloads.EventoDTO;
 import com.example.gestioneEventi_S7_L5.payloads.PrenotazioneDTO;
 import com.example.gestioneEventi_S7_L5.payloads.UtenteDTO;
+import com.example.gestioneEventi_S7_L5.services.EventiService;
 import com.example.gestioneEventi_S7_L5.services.PrenotazioniService;
 import com.example.gestioneEventi_S7_L5.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class UtentiController {
     private UtentiService utentiService;
     @Autowired
     private PrenotazioniService prenotazioniService;
+    @Autowired
+    private EventiService eventiService;
 
     @GetMapping()
     public Page<Utente> getAll(@RequestParam(defaultValue = "0") int page,
@@ -62,7 +67,7 @@ public class UtentiController {
         //controllo che l'id passato sia uno della sua lista
         Prenotazione myPrenotazione = prenotazioneList.stream().filter(prenotazione -> prenotazione.getId()
                 .equals(prenotazioneId)).findFirst().orElseThrow(() -> new NotFoundException(prenotazioneId));
-        
+
         return prenotazioniService.findByIdAndUpdate(myPrenotazione.getId(), updatedPrenotazioneDTO);
     }
 
@@ -76,6 +81,35 @@ public class UtentiController {
                 .equals(prenotazioneId)).findFirst().orElseThrow(() -> new NotFoundException(prenotazioneId));
 
         prenotazioniService.findByIdAndDelete(myPrenotazione.getId());
+    }
+
+    @GetMapping("/me/eventi")
+    public List<Evento> findMyEventi(@AuthenticationPrincipal Utente currentAuthenticatedUser) {
+        return eventiService.findByOrganizzatore(currentAuthenticatedUser);
+    }
+
+    @PutMapping("/me/eventi/{eventoId}")
+    public Evento findMyEventoAndUpdate(@AuthenticationPrincipal Utente currentAuthenticatedUser, @PathVariable UUID eventoId, @RequestBody @Validated EventoDTO updatedEventoDTO) {
+        List<Evento> eventoList = eventiService.findByOrganizzatore(currentAuthenticatedUser);
+
+        //controllo che l'id passato sia uno della mia lista
+        Evento myEvento = eventoList.stream().filter(evento -> evento.getId()
+                .equals(eventoId)).findFirst().orElseThrow(() -> new NotFoundException(eventoId));
+
+
+        return eventiService.findByIdAndUpdate(myEvento.getId(), updatedEventoDTO);
+    }
+
+    @DeleteMapping("/me/eventi/{eventoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findMyEventoAndDelete(@AuthenticationPrincipal Utente currentAuthenticatedUser , @PathVariable UUID eventoId) {
+        List<Evento> eventoList = eventiService.findByOrganizzatore(currentAuthenticatedUser);
+
+        //controllo che l'id passato sia uno della mia lista
+        Evento myEvento = eventoList.stream().filter(evento -> evento.getId()
+                .equals(eventoId)).findFirst().orElseThrow(() -> new NotFoundException(eventoId));
+
+        eventiService.findByIdAndDelete(myEvento.getId());
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.gestioneEventi_S7_L5.services;
 
 import com.example.gestioneEventi_S7_L5.entities.Evento;
+import com.example.gestioneEventi_S7_L5.entities.Prenotazione;
 import com.example.gestioneEventi_S7_L5.entities.Utente;
 import com.example.gestioneEventi_S7_L5.exceptions.BadRequestException;
 import com.example.gestioneEventi_S7_L5.exceptions.NotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -61,6 +63,9 @@ public class EventiService {
 
     public Evento findById(UUID eventoId){
         return this.eventiRepository.findById(eventoId).orElseThrow(() -> new NotFoundException(eventoId));
+    }
+    public List<Evento> findByOrganizzatore(Utente utente){
+        return eventiRepository.findByOrganizzatore(utente);
     }
 
     public Evento findByIdAndUpdate(UUID  eventoId, EventoDTO updatedEventoDTO){
