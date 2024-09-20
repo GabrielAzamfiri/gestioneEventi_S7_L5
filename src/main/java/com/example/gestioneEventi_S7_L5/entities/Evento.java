@@ -22,7 +22,7 @@ public class Evento {
     private String titolo;
     private String descrizione;
     private LocalDate dataEvento;
-    private Integer nrPostiDisponibili;
+    private int nrPostiDisponibili;
 
     @ManyToOne
     @JoinColumn(name = "organizzatore")

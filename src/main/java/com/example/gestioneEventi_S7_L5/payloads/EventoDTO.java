@@ -1,6 +1,7 @@
 package com.example.gestioneEventi_S7_L5.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record EventoDTO(
@@ -15,8 +16,8 @@ public record EventoDTO(
         @NotEmpty(message = "La data Evento è obbligatoria")
         String dataEvento,
 
-        @NotEmpty(message = "Il nr Posti Disponibili è obbligatorio")
-        Integer nrPostiDisponibili,
+        @NotNull( message = "Il nr Posti Disponibili è obbligatorio")
+        int nrPostiDisponibili,
 
         @NotEmpty(message = "L'organizzatore è obbligatorio")
         String organizzatore

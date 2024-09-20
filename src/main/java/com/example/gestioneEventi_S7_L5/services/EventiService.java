@@ -7,6 +7,7 @@ import com.example.gestioneEventi_S7_L5.exceptions.NotFoundException;
 import com.example.gestioneEventi_S7_L5.payloads.EventoDTO;
 import com.example.gestioneEventi_S7_L5.repositories.EventiRepository;
 import com.example.gestioneEventi_S7_L5.repositories.UtentiRepository;
+import com.example.gestioneEventi_S7_L5.security.JWTCheckFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,9 @@ public class EventiService {
 
     @Autowired
     private  UtentiRepository utentiRepository;
+
+    @Autowired
+    private JWTCheckFilter jwtCheckFilter;
 
     public Page<Evento> findAll(int page, int size, String sortBy){
         if(page > 100) page = 100;
@@ -48,7 +52,6 @@ public class EventiService {
             throw new BadRequestException("L'id inserito non è valido! Necessario inserire un ID di Tipo UUID");
         }
         Utente organizzatore = utentiRepository.findById(uuidUtente).orElseThrow(() ->  new NotFoundException(uuidUtente));
-
 
         Evento evento = new Evento(eventoDTO.titolo(),eventoDTO.descrizione(),dataEvento,eventoDTO.nrPostiDisponibili(),organizzatore);
 

@@ -4,7 +4,11 @@ import com.example.gestioneEventi_S7_L5.enums.RuoloUtente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Utente {
+public class Utente implements UserDetails {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -39,5 +43,15 @@ public class Utente {
         this.email = email;
         this.password = password;
         this.ruolo = ruolo;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Questo metodo deve restituire una lista di ruoli dell'utente (SimpleGrantedAuthority, classe che in Spring rappresenta i ruoli degli utenti)
+        return List.of(new SimpleGrantedAuthority(this.ruolo.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 }
