@@ -2,6 +2,7 @@ package com.example.gestioneEventi_S7_L5.entities;
 
 import com.example.gestioneEventi_S7_L5.enums.RuoloUtente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Entity
+@JsonIgnoreProperties({ "authorities", "prenotazioneList", "eventoList", "username", "enabled", "accountNonLocked", "accountNonExpired", "credentialsNonExpired"})
 public class Utente implements UserDetails {
     @Id
     @GeneratedValue
@@ -30,11 +32,11 @@ public class Utente implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RuoloUtente ruolo;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "organizzatore")
     private List<Evento> eventoList;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "utente")
     private List<Prenotazione> prenotazioneList;
 
