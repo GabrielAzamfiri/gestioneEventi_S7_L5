@@ -47,6 +47,9 @@ public class UtentiService {
         RuoloUtente ruoloUtente;
         try {
             ruoloUtente = RuoloUtente.valueOf(utenteDTO.ruolo().toUpperCase());
+            if (ruoloUtente == RuoloUtente.ADMIN) {
+                throw new BadRequestException("Errore: non puoi inserire ADMIN come ruolo!!.");
+            }
         } catch (Exception e) {
             throw new BadRequestException("Errore: il ruolo specificato non esiste.");
         }
@@ -72,6 +75,9 @@ public class UtentiService {
         RuoloUtente ruoloUtente;
         try {
             ruoloUtente = RuoloUtente.valueOf(updatedUtenteDTO.ruolo().toUpperCase());
+            if (ruoloUtente == RuoloUtente.ADMIN) {
+                throw new BadRequestException("Errore: non puoi inserire ADMIN come ruolo!!.");
+            }
         } catch (Exception e) {
             throw new BadRequestException("Errore: il ruolo specificato non esiste.");
         }
