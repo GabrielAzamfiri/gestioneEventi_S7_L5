@@ -22,6 +22,7 @@ public class Evento {
     private String titolo;
     private String descrizione;
     private LocalDate dataEvento;
+    private String luogo;
     private int nrPostiDisponibili;
 
     @ManyToOne
@@ -33,10 +34,11 @@ public class Evento {
     @OneToMany(mappedBy = "evento")
     private List<Prenotazione> prenotazioneList;
 
-    public Evento(String titolo, String descrizione, LocalDate dataEvento, Integer nrPostiDisponibili, Utente organizzatore) {
+    public Evento(String titolo, String descrizione, LocalDate dataEvento, String luogo, int nrPostiDisponibili, Utente organizzatore) {
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.dataEvento = dataEvento;
+        this.luogo = luogo;
         this.nrPostiDisponibili = nrPostiDisponibili;
         this.organizzatore = organizzatore;
     }

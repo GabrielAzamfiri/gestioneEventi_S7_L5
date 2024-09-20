@@ -63,7 +63,7 @@ public class EventiService {
 
         Utente organizzatore = (Utente) authentication.getPrincipal();
 
-        Evento evento = new Evento(eventoDTO.titolo(),eventoDTO.descrizione(),dataEvento,eventoDTO.nrPostiDisponibili(), organizzatore);
+        Evento evento = new Evento(eventoDTO.titolo(),eventoDTO.descrizione(),dataEvento,eventoDTO.luogo() ,eventoDTO.nrPostiDisponibili(), organizzatore);
 
         return eventiRepository.save(evento);
 
@@ -100,6 +100,7 @@ public class EventiService {
         found.setDescrizione(updatedEventoDTO.descrizione());
         found.setDataEvento(dataEvento);
         found.setNrPostiDisponibili(updatedEventoDTO.nrPostiDisponibili());
+        found.setLuogo(updatedEventoDTO.luogo());
 
 
         return this.eventiRepository.save(found);

@@ -16,6 +16,9 @@ public record EventoDTO(
         @NotEmpty(message = "La data Evento è obbligatoria")
         String dataEvento,
 
+        @NotEmpty(message = "Il luogo è obbligatorio")
+        String luogo,
+
         @NotNull( message = "Il nr Posti Disponibili è obbligatorio")
         int nrPostiDisponibili
 
